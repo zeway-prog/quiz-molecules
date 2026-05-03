@@ -1,6 +1,6 @@
-// Unified script - Logic: Cumulative Learning (5 new + all previous)
+// Unified script - Logic: Cumulative Learning + Correction Pop-up
 
-// Data sources (Updated from provided table)
+// Data sources
 const ADULTS = [
   "Acétylsalicylique (acide)", "Alprazolam", "Amiodarone", "Amoxicilline", "Bromazépam",
   "Buprénorphine", "Carbamazépine", "Codéine", "Colchicine", "Diazépam", "Dompéridone",
@@ -16,16 +16,17 @@ const CHILD = [
   "Lopéramide", "Métopimazine", "Paracétamol", "Prednisolone", "Prednisone", "Racécadotril", "Tramadol"
 ];
 
-const STORAGE_KEY = 'medoc_name_state_v2';
+const STORAGE_KEY = 'medoc_name_state_v3';
 
 // Runtime state
 let availableAdults = [];
 let availableChild = [];
-let stageItems = [];       // Molécules à trouver dans le tour actuel
-let masteredItems = [];    // Molécules déjà réussies (à réinjecter au prochain palier)
-let current = null;        // {name, origin, index}
+let stageItems = [];       
+let masteredItems = [];    
+let current = null;        
 let stageNumber = 1; 
-let trueCount = 0;         // Score cumulé
+let trueCount = 0;         
+let medData = {}; // Pour stocker les infos du JSON
 
 // DOM elements
 const originEl = document.getElementById('origin');
@@ -34,14 +35,14 @@ const startBtn = document.getElementById('start');
 const trueBtn = document.getElementById('true');
 const falseBtn = document.getElementById('false');
 const hardResetBtn = document.getElementById('hard-reset');
-const exportBtn = document.getElementById('export');
+const advanceBtn = document.getElementById('advance');
 const countAdultEl = document.getElementById('count-adult');
 const countChildEl = document.getElementById('count-child');
-const listAdultEl = document.getElementById('list-adult');
-const listChildEl = document.getElementById('list-child');
-const toggleLists = document.getElementById('toggle-lists');
-const listsWrapper = document.querySelector('.lists');
-let advanceBtn = document.getElementById('advance');
+
+// Modal Elements
+const modal = document.getElementById('correction-modal');
+const modalBody = document.getElementById('modal-body');
+const closeModal = document.getElementById('close-modal');
 
 let stageEl = document.getElementById('stage-info');
 if(!stageEl){ 
@@ -50,6 +51,12 @@ if(!stageEl){
     const card = document.getElementById('card'); 
     if(card) document.querySelector('main').insertBefore(stageEl, card); 
 }
+
+// Load JSON data for the pop-up
+fetch('pediatric_info.json')
+  .then(response => response.json())
+  .then(data => { medData = data; })
+  .catch(err => console.error("Erreur chargement JSON:", err));
 
 // Persistence
 function saveState(){
@@ -80,8 +87,6 @@ function loadState(){
 function updateUI(){
   if(countAdultEl) countAdultEl.textContent = availableAdults.length;
   if(countChildEl) countChildEl.textContent = availableChild.length;
-  if(listAdultEl) listAdultEl.innerHTML = availableAdults.map(n=>`<li>${n}</li>`).join('');
-  if(listChildEl) listChildEl.innerHTML = availableChild.map(n=>`<li>${n}</li>`).join('');
   
   const target = stageNumber * 5;
   if(stageEl) stageEl.innerHTML = `<h3>Partie ${stageNumber} — Vrai total: ${trueCount} / ${target}</h3>`;
@@ -125,42 +130,69 @@ function showRandom(){
 
 function confirmTrue(){
   if(!current) return;
-  
   const item = stageItems.splice(current.index, 1)[0];
   masteredItems.push(item);
-  
   trueCount++;
   current = null;
   saveState();
 
   if(trueCount >= stageNumber * 5){
-    if(originEl) originEl.textContent = "-";
-    if(molEl) molEl.textContent = "Partie terminée !";
+    molEl.textContent = "Partie terminée !";
   } else {
     showRandom();
   }
   updateUI();
 }
 
+// Logic for Faux button with Pop-up
 function confirmFalse(){
-  showRandom();
+    if (!current) return;
+
+    const info = medData[current.name];
+    
+    if (info) {
+        modalBody.innerHTML = `
+            <table class="info-table">
+                <tr><td class="label">Molécule</td><td>${current.name}</td></tr>
+                <tr><td class="label">Classe</td><td>${info.classe || '-'}</td></tr>
+                <tr><td class="label">Doses Usuelles</td><td>${info.doses_usuelles || '-'}</td></tr>
+                <tr><td class="label">Doses Max</td><td>${info.doses_maximales || '-'}</td></tr>
+                <tr><td class="label">Remarques</td><td>${info.remarques || '-'}</td></tr>
+                <tr><td class="label">Spécialité</td><td>${info.exemple || '-'}</td></tr>
+            </table>
+        `;
+    } else {
+        modalBody.innerHTML = `<p>Aucune fiche détaillée trouvée pour <strong>${current.name}</strong>.</p>`;
+    }
+
+    modal.classList.remove('hidden'); 
 }
+
+// Close modal and switch molecule
+if(closeModal) {
+    closeModal.onclick = () => { 
+        modal.classList.add('hidden');
+        showRandom(); 
+    };
+}
+
+window.onclick = (event) => {
+    if (event.target == modal) {
+        modal.classList.add('hidden');
+        showRandom();
+    }
+};
 
 function advanceStage(){
   const target = stageNumber * 5;
   if(trueCount < target) return;
-
   stageNumber++;
-  
-  // Reprendre les molécules précédentes + ajouter 5 nouvelles
   stageItems = [...masteredItems];
   masteredItems = []; 
-  
   for(let i=0; i<5; i++){
     const item = pickFromAvailable();
     if(item) stageItems.push(item);
   }
-
   saveState();
   updateUI();
   showRandom();
@@ -193,12 +225,5 @@ if(falseBtn) falseBtn.addEventListener('click', confirmFalse);
 if(hardResetBtn) hardResetBtn.addEventListener('click', hardReset);
 if(advanceBtn) advanceBtn.addEventListener('click', advanceStage);
 
-if(toggleLists){
-  toggleLists.addEventListener('change', () => {
-    listsWrapper.classList.toggle('hidden', !toggleLists.checked);
-  });
-}
-
-// Init
 loadState();
 updateUI();
