@@ -1,0 +1,12 @@
+{
+  "name": "medoc_name",
+  "version": "1.0.0",
+  "description": "Jeu simple pour afficher aléatoirement des noms de molécules (adultes / enfants).",
+  "main": "ocr_parse.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

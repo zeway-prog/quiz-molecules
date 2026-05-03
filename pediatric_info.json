@@ -1,0 +1,12 @@
+{
+  "Céfixime": {
+    "denomination": "Céfixime",
+    "voie": "VO",
+    "doses_usuelles": "> 6 mois : 4mg/kg/prise",
+    "doses_maximales": "> 6 mois : 8mg/kg/prise",
+    "remarques": "Espacer les doses de 12h",
+    "exemple": "Oroken 200mg, 100mg/5mL",
+    "classe": "Céphalosporine de 3ème génération",
+    "autres": "indications : infections urinaire"
+  }
+}

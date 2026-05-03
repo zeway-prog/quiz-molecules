@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jeu Médecaments - medoc_name</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Place the pediatric table image at `img/pediatric_header.png` to show it here. -->
+  <div class="header-image-wrapper">
+    <img id="header-img" src="img/pediatric_header.png" alt="Tableau pédiatrique" />
+  </div>
+  <main>
+    <h1>Jeu : Noms de molécules</h1>
+    <div id="card">
+      <div id="origin">---</div>
+      <div id="mol">Appuie sur "Début"</div>
+    </div>
+
+    <div class="controls">
+    <button id="start">Début</button>
+    <button id="true" disabled>Vrai</button>
+    <button id="false" disabled>Faux</button>
+  <button id="hard-reset">Réinitialiser tout</button>
+    <button id="advance" disabled>Suivant</button>
+    <button id="export" disabled>Exporter CSV</button>
+    </div>
+
+    <div id="remaining">
+      <p>Restants adulte: <span id="count-adult"></span></p>
+      <p>Restants enfant: <span id="count-child"></span></p>
+      <label class="toggle-lists"><input id="toggle-lists" type="checkbox"/> Afficher les listes</label>
+      <div class="lists hidden">
+        <div class="list-col">
+          <h3>Adultes</h3>
+          <ul id="list-adult"></ul>
+        </div>
+        <div class="list-col">
+          <h3>Enfants</h3>
+          <ul id="list-child"></ul>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Le mot affiché est retiré définitivement quand tu appuies sur "Suivant".</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

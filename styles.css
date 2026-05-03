@@ -1,0 +1,48 @@
+*{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f5f7fb;margin:0}
+main{width:520px;background:white;border-radius:8px;padding:24px;box-shadow:0 8px 30px rgba(18,38,63,0.08)}
+h1{text-align:center;margin:0 0 16px}
+#card{border:2px solid #e4e7ef;border-radius:8px;padding:20px;text-align:center;margin-bottom:12px}
+#origin{font-size:14px;color:#6b7280;margin-bottom:8px}
+#mol{font-size:26px;font-weight:600}
+.controls{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.controls button{padding:8px 14px;border-radius:6px;border:1px solid #d1d5db;background:#fff;cursor:pointer}
+.controls button:disabled{opacity:0.5;cursor:not-allowed}
+#remaining p{margin:6px 0;color:#374151}
+.lists{display:flex;gap:16px;margin-top:12px}
+.list-col{flex:1}
+.list-col h3{margin:6px 0;font-size:14px}
+.list-col ul{max-height:200px;overflow:auto;border:1px solid #eef2f7;padding:8px;border-radius:6px;list-style:none;margin:0}
+.list-col li{padding:4px 6px;border-bottom:1px solid #f3f4f6}
+.list-col li:last-child{border-bottom:none}
+
+.hidden{display:none}
+.toggle-lists{display:block;margin-top:8px;color:#374151;font-size:13px}
+.toggle-lists input{margin-right:8px}
+
+/* Modal */
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:60}
+.modal.hidden{display:none}
+.modal-backdrop{position:absolute;inset:0;background:rgba(2,6,23,0.5)}
+.modal-panel{position:relative;background:#fff;padding:18px;border-radius:8px;max-width:720px;width:92%;z-index:70;box-shadow:0 12px 40px rgba(2,6,23,0.15)}
+.modal-close{position:absolute;right:12px;top:12px;border:0;background:transparent;font-size:18px;cursor:pointer}
+.ocr-result{margin-top:12px;max-height:220px;overflow:auto;border:1px solid #eef2f7;padding:8px;border-radius:6px}
+
+/* pediatric table in modal */
+.pedi-table{width:100%;border-collapse:collapse;margin-top:8px}
+.pedi-table th{background:#f3f4f6;border:1px solid #e6edf3;padding:8px;text-align:left;font-weight:600}
+.pedi-table td{border:1px solid #e6edf3;padding:8px}
+
+/* Header image shown above main content */
+.header-image-wrapper{position:fixed;top:0;left:0;width:100%;display:flex;justify-content:center;padding:12px;background:linear-gradient(180deg,#ffffffcc,#f5f7fbcc);z-index:50;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+.header-image-wrapper img{max-width:100%;height:auto;max-height:120px;border-radius:6px}
+
+/* ensure main content is pushed below the fixed header */
+main{margin-top:152px}
+
+@media (max-width:600px){
+	.header-image-wrapper{padding:8px}
+	.header-image-wrapper img{max-height:72px}
+	main{margin-top:96px}
+}
+
