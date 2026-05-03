@@ -3,28 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jeu Médecaments - medoc_name</title>
+  <title>Jeu Médicaments - Mémorisation</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Place the pediatric table image at `img/pediatric_header.png` to show it here. -->
+
   <div class="header-image-wrapper">
     <img id="header-img" src="img/pediatric_header.png" alt="Tableau pédiatrique" />
   </div>
+
   <main>
     <h1>Jeu : Noms de molécules</h1>
+    
+    <div id="stage-info"></div>
+
     <div id="card">
       <div id="origin">---</div>
       <div id="mol">Appuie sur "Début"</div>
     </div>
 
     <div class="controls">
-    <button id="start">Début</button>
-    <button id="true" disabled>Vrai</button>
-    <button id="false" disabled>Faux</button>
-  <button id="hard-reset">Réinitialiser tout</button>
-    <button id="advance" disabled>Suivant</button>
-    <button id="export" disabled>Exporter CSV</button>
+        <button id="start">Début</button>
+        <button id="true" disabled>Vrai</button>
+        <button id="false" disabled>Faux</button>
+        <button id="advance" disabled>Suivant</button>
+        <button id="hard-reset">Réinitialiser tout</button>
     </div>
 
     <div id="remaining">
@@ -48,19 +51,18 @@
     </footer>
   </main>
 
+  <!-- Le Pop-up de correction (Placé avant le script) -->
+  <div id="correction-modal" class="modal hidden">
+      <div class="modal-content">
+          <span id="close-modal" class="close-btn">&times;</span>
+          <h2>Fiche Posologique</h2>
+          <div id="modal-body">
+              <!-- Rempli par JS -->
+          </div>
+      </div>
+  </div>
+
+  <!-- Script à la fin pour s'assurer que le HTML est chargé -->
   <script src="script.js"></script>
-  
-<!-- Fenêtre Pop-up pour la correction -->
-<div id="correction-modal" class="modal hidden">
-    <div class="modal-content">
-        <span id="close-modal" class="close-btn">&times;</span>
-        <h2>Fiche Posologique</h2>
-        <div id="modal-body">
-            <!-- Les infos de la molécule s'afficheront ici -->
-        </div>
-    </div>
-</div>
-
-
 </body>
 </html>
